@@ -1,7 +1,7 @@
 import { hash, compare } from 'bcrypt';
 import { sign, verify } from 'jsonwebtoken';
 import { UserProfile, UserProfileDoc } from '../models'
-import { CreateUserDTO } from '../dtos'
+import { CreateUserDTO, UpdatePasswordDTO } from '../dtos'
 import { getMessageError, getFunctionCallerName } from '../utils';
 import { CatchAsyncDecorator } from '../decorators'
 
@@ -30,9 +30,29 @@ class AuthService {
 
             throw new Error('Wrong Password!!');
         }
-        const userInfo = { name: existedUser.name, username, city: existedUser.address.city, state: existedUser.address.city }
-        const accessToken = sign(userInfo, 'secretKey');
+        const userInfo = { name: existedUser.name, username, city: existedUser.address.city, state: existedUser.address.state }
+        const accessToken = sign(userInfo, 'secretKey', {expiresIn : '1d'});
         return accessToken;
+    }
+
+    async updatePassword(username: string, dto: UpdatePasswordDTO) {
+        const existedUser = await UserProfile.findOne({ username });
+        if (!existedUser) {
+            throw new Error('User is not existed!!');
+        }
+        const { oldPassword, newPassword } = dto;
+        if (oldPassword == newPassword) {
+            throw new Error('New password cannot be the same as the old password');
+        }
+        const passwordCheck = await compare(oldPassword, existedUser.password);
+        if (!passwordCheck) {
+
+            throw new Error('Wrong current password!!');
+        }
+        const hashPassword = await hash(newPassword, 10);
+        existedUser.password = hashPassword;
+        await existedUser.save();
+        return true;
     }
 }
 

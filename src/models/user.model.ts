@@ -53,6 +53,7 @@ const userProfileSchema: UserProfileSchema = new Schema(
                 state: {type: String, required: true,},
                 zipcode: {type: String, required: true,},
             },
+            _id : false,
             required: true,
         }
     },
@@ -61,6 +62,7 @@ const userProfileSchema: UserProfileSchema = new Schema(
         toJSON: {
             transform(doc, ret) {
                 delete ret.__v;
+                delete ret.password;
             },
         },
     },
