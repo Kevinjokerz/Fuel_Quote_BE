@@ -21,5 +21,10 @@ interface UpdatePasswordDTO {
     newPassword : string;
 }
 
+interface LoginDTO {
+    username : string;
+    password : string;
+}
 
-export {CreateUserDTO, UpdateProfileDTO, UpdatePasswordDTO};
+
+export {CreateUserDTO, UpdateProfileDTO, UpdatePasswordDTO, LoginDTO};

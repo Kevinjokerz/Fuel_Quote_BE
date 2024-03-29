@@ -1,9 +1,9 @@
 import { hash, compare } from 'bcrypt';
-import { sign, verify } from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 import { UserProfile, UserProfileDoc } from '../models'
-import { CreateUserDTO, UpdatePasswordDTO } from '../dtos'
-import { getMessageError, getFunctionCallerName } from '../utils';
+import { CreateUserDTO, UpdatePasswordDTO, LoginDTO } from '../dtos'
 import { CatchAsyncDecorator } from '../decorators'
+import { ConflictError, BadRequestError, NotFoundError, UnAuthorizedError } from '../types/http-error.type'
 
 @CatchAsyncDecorator(AuthService.name)
 class AuthService {
@@ -12,7 +12,7 @@ class AuthService {
         const { username, password } = dto;
         const userInfo = await UserProfile.findOne({ username });
         if (userInfo) {
-            throw new Error('User is already existed!!');
+            throw new ConflictError('User is already existed!!');
         }
         const hashPassword = await hash(password, 10);
         dto.password = hashPassword
@@ -20,34 +20,34 @@ class AuthService {
         return newUser;
     }
 
-    async login(username: string, password: string) {
+    async login(dto: LoginDTO) {
+        const { username, password } = dto;
         const existedUser = await UserProfile.findOne({ username });
         if (!existedUser) {
-            throw new Error('User is not existed!!');
+            throw new NotFoundError('User is not existed!!');
         }
         const passwordCheck = await compare(password, existedUser.password);
         if (!passwordCheck) {
 
-            throw new Error('Wrong Password!!');
+            throw new BadRequestError('Wrong Password!!');
         }
         const userInfo = { name: existedUser.name, username, city: existedUser.address.city, state: existedUser.address.state }
-        const accessToken = sign(userInfo, 'secretKey', {expiresIn : '1d'});
+        const accessToken = sign(userInfo, 'secretKey', { expiresIn: '1d' });
         return accessToken;
     }
 
     async updatePassword(username: string, dto: UpdatePasswordDTO) {
         const existedUser = await UserProfile.findOne({ username });
         if (!existedUser) {
-            throw new Error('User is not existed!!');
+            throw new NotFoundError('User is not existed!!');
         }
         const { oldPassword, newPassword } = dto;
-        if (oldPassword == newPassword) {
-            throw new Error('New password cannot be the same as the old password');
+        if (oldPassword === newPassword) {
+            throw new BadRequestError('New password cannot be the same as the old password');
         }
         const passwordCheck = await compare(oldPassword, existedUser.password);
         if (!passwordCheck) {
-
-            throw new Error('Wrong current password!!');
+            throw new BadRequestError('Wrong current password!!');
         }
         const hashPassword = await hash(newPassword, 10);
         existedUser.password = hashPassword;

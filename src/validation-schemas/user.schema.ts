@@ -1,8 +1,16 @@
 import Joi, { object } from 'joi';
-import { CreateUserDTO } from '../dtos';
+import { CreateUserDTO, LoginDTO, UpdatePasswordDTO } from '../dtos';
 
 interface CreateUserPayload {
     payload: CreateUserDTO;
+}
+
+interface LoginPayload {
+    payload : LoginDTO
+}
+
+interface UpdatePasswordPayload {
+    payload : UpdatePasswordDTO
 }
 
 const userCreateValidator = Joi.object<CreateUserPayload>().keys({
@@ -17,12 +25,29 @@ const userCreateValidator = Joi.object<CreateUserPayload>().keys({
             address: Joi.object().keys({
                 street: Joi.string().required(),
                 city: Joi.string().required(),
-                state: Joi.string().required(),
+                state: Joi.string().min(2).max(2).required(),
                 zipcode: Joi.string().required(),
             })
         })
         .required(),
 });
 
-;
-export { userCreateValidator };
+const userLoginValidator = Joi.object<LoginPayload>().keys({
+    payload: Joi.object<LoginDTO>()
+    .keys({
+        username : Joi.string().min(2).max(20).required(),
+        password: Joi.string().min(8).max(20).required(),
+    })
+    .required(),
+});
+
+const updatePasswordValidator = Joi.object<UpdatePasswordPayload>().keys({
+    payload: Joi.object<UpdatePasswordDTO>()
+    .keys({
+        oldPassword : Joi.string().min(8).max(20).required(),
+        newPassword : Joi.string().min(8).max(20).required(),
+    })
+    .required(),
+});
+
+export { userCreateValidator, userLoginValidator, updatePasswordValidator };

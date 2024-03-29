@@ -9,20 +9,21 @@ class AuthController {
     async register(req: Request, res: Response) {
         const { payload } = req.body;
         const newUser = await authService.register(payload);
-        res.send({ newUser });
+        res.status(201).send({ newUser });
         userEventEmitter.emitEventUserCreated(newUser);
 
     }
     async login(req: Request, res: Response) {
-        const { username, password } = req.body;
-        const accessToken = await authService.login(username, password);
-        return res.send(accessToken);
+        const { payload } = req.body;
+        const accessToken = await authService.login(payload);
+        res.status(200).send(accessToken);
     }
 
     async updatePassword(req: CustomRequest, res: Response) {
-        const {username} = req.userInfo as UserInfo;
-        await authService.updatePassword(username, req.body);
-        res.send({message : "Password successfully changed"});
+        const { username } = req.userInfo as UserInfo;
+        const { payload } = req.body;
+        await authService.updatePassword(username, payload);
+        res.status(204).send({message : "Password successfully changed"});
 
     }
 

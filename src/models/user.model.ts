@@ -1,4 +1,3 @@
-import { required, string } from 'joi';
 import mongoose, { Schema, Document, Model, CallbackWithoutResultAndOptionalError } from 'mongoose';
 
 interface UserProfileInterface {
