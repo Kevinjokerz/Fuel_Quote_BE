@@ -5,12 +5,12 @@ import { OilHistory, OilHistoryDoc } from '../models'
 
 @CatchAsyncDecorator(QuoteHistoryService.name)
 class QuoteHistoryService {
-    async viewQuoteHistoryByUsername (username : string){
-        const histories = await OilHistory.find({username});
+    async viewQuoteHistoryByUsername(username: string) {
+        const histories = await OilHistory.find({ user_username: username });
         return histories;
     }
 
-    async createQuoteHistory (dto : CreateHistoryDTO){
+    async createQuoteHistory(dto: CreateHistoryDTO) {
         const newHistory = await OilHistory.create(dto);
         return newHistory;
     }
@@ -18,4 +18,4 @@ class QuoteHistoryService {
 
 const quoteHistoryService = new QuoteHistoryService();
 
-export {quoteHistoryService};
+export { quoteHistoryService };

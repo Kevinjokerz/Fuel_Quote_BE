@@ -1,8 +1,9 @@
 import { number, string } from 'joi';
 import mongoose, { Schema, Document, Model, CallbackWithoutResultAndOptionalError } from 'mongoose';
+import { UserProfile } from './user.model';
 
 interface OilHistoryInterface {
-    username: string;
+    user_username: string;
     price: number;
     currency: string;
     state: string;
@@ -18,9 +19,11 @@ type OilHistorySchema = Schema<OilHistoryDoc, OilHistoryModel>;
 
 const oilHistorySchema: OilHistorySchema = new Schema(
     {
-        username: {
+        user_username: {
             type: String,
-            required: true,
+            ref: UserProfile.collection.collectionName,
+            foreignField: 'username',
+            required: false,
         },
         price: {
             type: Number,

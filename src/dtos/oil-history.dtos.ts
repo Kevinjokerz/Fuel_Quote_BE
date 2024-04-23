@@ -1,5 +1,5 @@
 interface CreateHistoryDTO {
-    username : string; 
+    user_username : string; 
     price : number; 
     currency : string; 
     state : string;
