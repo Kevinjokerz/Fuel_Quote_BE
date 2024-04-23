@@ -6,6 +6,6 @@ import { authenticationMiddleware } from "../../middlewares"
 const userRouter = Router()
 
 userRouter.get('/profile', authenticationMiddleware, userController.getProfile);
-userRouter.put('/profile', authenticationMiddleware, userController.editProfile);
+userRouter.put('/edit-profile', authenticationMiddleware, userController.editProfile);
 
 export default userRouter;
