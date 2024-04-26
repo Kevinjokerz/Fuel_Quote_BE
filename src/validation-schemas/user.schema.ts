@@ -46,6 +46,7 @@ const updatePasswordValidator = Joi.object<UpdatePasswordPayload>().keys({
     .keys({
         oldPassword : Joi.string().min(8).max(20).required(),
         newPassword : Joi.string().min(8).max(20).required(),
+        newPasswordConfirm : Joi.string().min(8).max(20).required(),
     })
     .required(),
 });

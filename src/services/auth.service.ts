@@ -41,9 +41,12 @@ class AuthService {
         if (!existedUser) {
             throw new NotFoundError('User is not existed!!');
         }
-        const { oldPassword, newPassword } = dto;
+        const { oldPassword, newPassword, newPasswordConfirm } = dto;
         if (oldPassword === newPassword) {
             throw new BadRequestError('New password cannot be the same as the old password');
+        }
+        if (newPassword !== newPasswordConfirm) {
+            throw new BadRequestError('New password and Confirm New Password does not match');
         }
         const passwordCheck = await compare(oldPassword, existedUser.password);
         if (!passwordCheck) {

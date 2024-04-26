@@ -1,4 +1,5 @@
 import { OilHistory } from '../models'
+import {GetQuoteInfoDTO} from '../dtos'
 
 
 class OilPriceService {
@@ -29,11 +30,22 @@ class OilPriceService {
         return marginRate / 100;
     }
 
-    async getFinalQuote(username: string, state: string, gallon: number) {
+    getDeliveryDate (dto: GetQuoteInfoDTO) {
+        const {deliveryDate} = dto;
+        return(deliveryDate);
+    }
+
+    getGallonRequested (dto: GetQuoteInfoDTO) {
+        const {gallon} = dto;
+        return(gallon);
+    }
+
+    async getFinalQuote(username: string, state: string, dto: GetQuoteInfoDTO) {
 
         try {
             const totalCountQuoted = await OilHistory.countDocuments({ user_username: username })
             const isFirstQuote = totalCountQuoted <= 0;
+            const {gallon} = dto;
             const oilQuote = this.getOilQuote(gallon, 1.5);
             const marginRate = this.getMaginPercent(state, gallon, isFirstQuote);
             console.log(marginRate);

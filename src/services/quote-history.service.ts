@@ -11,6 +11,7 @@ class QuoteHistoryService {
     }
 
     async createQuoteHistory(dto: CreateHistoryDTO) {
+        
         const newHistory = await OilHistory.create(dto);
         return newHistory;
     }

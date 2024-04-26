@@ -19,6 +19,7 @@ interface UpdateProfileDTO {
 interface UpdatePasswordDTO {
     oldPassword: string;
     newPassword : string;
+    newPasswordConfirm : string;
 }
 
 interface LoginDTO {

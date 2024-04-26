@@ -8,6 +8,8 @@ const validateBody = <T>(schema: AnySchema<T>) => {
     const result = schema.validate(value);
     if (result.error) {
       const firstError = result.error.details[0];
+      const tempError = new BadRequestError(firstError.message);
+      console.log(tempError);
       return next(new BadRequestError(firstError.message));
     }
     return next();

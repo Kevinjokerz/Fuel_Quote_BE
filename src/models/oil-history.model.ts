@@ -4,7 +4,9 @@ import { UserProfile } from './user.model';
 
 interface OilHistoryInterface {
     user_username: string;
+    gallons_requested: number;
     price: number;
+    deliveryDate: Date;
     currency: string;
     state: string;
 }
@@ -25,8 +27,16 @@ const oilHistorySchema: OilHistorySchema = new Schema(
             foreignField: 'username',
             required: false,
         },
+        gallons_requested: {
+            type: Number,
+            required: true,
+        },
         price: {
             type: Number,
+            required: true,
+        },
+        deliveryDate: {
+            type: Date,
             required: true,
         },
         currency: {

@@ -9,6 +9,7 @@ class AuthController {
     async register(req: Request, res: Response) {
         const { payload } = req.body;
         const newUser = await authService.register(payload);
+        console.log(newUser);
         res.status(201).send({ newUser });
         userEventEmitter.emitEventUserCreated(newUser);
 

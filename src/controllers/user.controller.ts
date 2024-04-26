@@ -9,6 +9,7 @@ import {CustomRequest, UserInfo} from '../types/custom-request.type'
 class UserController {
     async getProfile(req: CustomRequest, res: Response) {
         const {username} = req.userInfo as UserInfo;
+        console.log(username);
         const existedUserInfo = await userService.getProfileByUsername(username);
         res.send(existedUserInfo)
     }

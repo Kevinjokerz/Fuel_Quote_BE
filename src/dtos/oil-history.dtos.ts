@@ -1,8 +1,15 @@
 interface CreateHistoryDTO {
     user_username : string; 
-    price : number; 
+    gallons_requested: number;
+    price : number;
+    deliveryDate: Date;
     currency : string; 
     state : string;
 }
 
-export { CreateHistoryDTO };
+interface GetQuoteInfoDTO {
+    gallon : number;
+    deliveryDate: Date;
+}
+
+export { CreateHistoryDTO, GetQuoteInfoDTO };

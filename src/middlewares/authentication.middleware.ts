@@ -20,7 +20,6 @@ const authenticationMiddleware = async (req: CustomRequest, res: Response, next:
         return next();
     } catch (error: any) {
         if (error instanceof Error) {
-            console.log(error);
             return next(new BadRequestError());
         }
         else {

@@ -4,6 +4,6 @@ import { authenticationMiddleware } from "../../middlewares"
 
 const oilPriceRouter = Router()
 
-oilPriceRouter.get('/oil', authenticationMiddleware, oilPriceController.getOilQuote);
+oilPriceRouter.post('/oil', authenticationMiddleware, oilPriceController.getOilQuote);
 
 export default oilPriceRouter;
